@@ -113,15 +113,15 @@ putcLCD       BSET  LCD_CNTR,LCD_RS  ; select the LCD Data register (DR)
 dataMov       BSET    LCD_CNTR,LCD_E   ; pull the LCD E-sigal high
               STAA    LCD_DAT          ; send the upper 4 bits of data to LCD
               BCLR    LCD_CNTR,LCD_E   ; pull the LCD E-signal low to complete the write oper.
-              LSLA                  ; match the lower 4 bits with the LCD data pins
-              LSLA                  ; -"-
-              LSLA                  ; -"-
-              LSLA                  ; -"-
+              LSLA                     ; match the lower 4 bits with the LCD data pins
+              LSLA                     ; -"-
+              LSLA                     ; -"-
+              LSLA                     ; -"-
               BSET    LCD_CNTR,LCD_E   ; pull the LCD E signal high
               STAA    LCD_DAT          ; send the lower 4 bits of data to LCD
               BCLR    LCD_CNTR,LCD_E   ; pull the LCD E-signal low to complete the write oper.
-              LDY     #1                ; adding this delay will complete the internal
-              JSR     del_50us          ; operation for most instructions
+              LDY     #1               ; adding this delay will complete the internal
+              JSR     del_50us         ; operation for most instructions
               RTS
 ;*******************************************************************
 ;* Binary to ASCII *
