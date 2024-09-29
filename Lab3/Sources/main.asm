@@ -2,14 +2,21 @@
 ;* Writing to the LCD *
 ;*******************************************************************
 ; Definitions
-;LCD_DAT       EQU     PTS ; LCD data port S, pins PS7,PS6,PS5,PS4
-;LCD_CNTR      EQU     PORTE ; LCD control port E, pins PE7(RS),PE4(E)
-;LCD_E         EQU     $10 ; LCD enable signal, pin PE4
-;LCD_RS        EQU     $80 ; LCD reset signal, pin PE7
+LCD_DAT       EQU     PTS ; LCD data port S, pins PS7,PS6,PS5,PS4
+LCD_CNTR      EQU     PORTE ; LCD control port E, pins PE7(RS),PE4(E)
+LCD_E         EQU     $10 ; LCD enable signal, pin PE4
+LCD_RS        EQU     $80 ; LCD reset signal, pin PE7
 
 ; code section
 
               ORG     $4000
+mem1          RMB     01 
+mem2          RMB     01 
+mem3          RMB     01 
+mem4          RMB     01 
+mem5          RMB     01 
+mem6          RMB     01 
+mem7          RMB     01 
 Entry:
 _Startup:
 
@@ -20,25 +27,25 @@ _Startup:
 ;*******************************************************************
 MainLoop      JSR     clrLCD                 ; clear LCD & home cursor
 
-              LDX     msg1                  ; display msg1
+              LDX     #msg1                 ; display msg1
               JSR     putsLCD               ; -"-
               LDAA    $3000                 ; load contents at $3000 into A
               JSR     leftHLF               ; convert left half of A into ASCII
-              STAA    #mem1                 ; store the ASCII byte into mem1
+              STAA    mem1                  ; store the ASCII byte into mem1
               LDAA    $3000                 ; load contents at $3000 into A
               JSR     rightHLF              ; convert right half of A into ASCII
-              STAA    #mem2                 ; store the ASCII byte into mem2
+              STAA    mem2                  ; store the ASCII byte into mem2
               LDAA    $3001                 ; load contents at $3001 into A
               JSR     leftHLF               ; convert left half of A into ASCII
-              STAA    #mem3                 ; store the ASCII byte into mem3
-              LDAA    #3001                 ; load contents at $3001 into A
+              STAA    mem3                  ; store the ASCII byte into mem3
+              LDAA    $3001                 ; load contents at $3001 into A
               JSR     rightHLF              ; convert right half of A into ASCII
-              STAA    #mem4                 ; store the ASCII byte into mem4
-              LDAA    #00                   ; load 0 into A
-              STAA    #mem5                 ; store string termination character 00 into mem5
+              STAA    mem4                  ; store the ASCII byte into mem4
+              LDAA    0                     ; load 0 into A
+              STAA    mem5                  ; store string termination character 00 into mem5
               LDX     #mem1                 ; output the 4 ASCII characters
               JSR     putsLCD               ; -"-
-              LDY     #2                    ; Delay = 1s
+              LDY     #20000                ; Delay = 1s | 1s = 1000000us , 1000000us/50 =  20000
               JSR     del_50us
               BRA     MainLoop              ; Loop
 msg1          dc.b    "Hi There! ",0
@@ -76,6 +83,14 @@ eloop:        LDX   #30           ;2 E-clk -
 iloop:        PSHA                ;2 E-clk |
               PULA                ;3 E-clk |
               PSHA                ;2 E-clk | 50us
+              PULA                ;3 E-clk |
+              PSHA                ;2 E-clk |
+              PULA                ;3 E-clk |
+              PSHA                ;2 E-clk |
+              PULA                ;3 E-clk |
+              PSHA                ;2 E-clk |
+              PULA                ;3 E-clk |
+              PSHA                ;2 E-clk |
               PULA                ;3 E-clk |
               NOP                 ;1 E-clk |
               NOP                 ;1 E-clk |
@@ -126,7 +141,7 @@ dataMov       BSET    LCD_CNTR,LCD_E   ; pull the LCD E-sigal high
 ;*******************************************************************
 ;* Binary to ASCII *
 ;*******************************************************************
-leftHLF       LSRA                  ; shift data to right
+leftHLF       LSRA                    ; shift data to right
               LSRA
               LSRA
               LSRA
