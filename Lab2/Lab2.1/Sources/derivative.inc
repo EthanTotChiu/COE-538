@@ -4,7 +4,7 @@
  ;
 
 			; include derivative specific macros
-            INCLUDE 'mc9s12c32.inc'
+            INCLUDE 'mc9s12dg128.inc'
 
 		
 
