@@ -1,3 +1,16 @@
+;**********************************************************************
+;* LCD display Test                                                   *
+;*                                                                    *
+;* write one ASCII character to the display                           *
+;* convert a two-digit hex number into two ASCII characters and dispay*
+;* Author: Ethan Chiu                                                 *
+;**********************************************************************
+; export symbols
+            XDEF Entry, _Startup              ; export ‘Entry’ symbol
+            ABSENTRY Entry              ; for absolute assembly: mark
+                                      ; this as applicat. entry point
+; Include derivative-specific definitions
+            INCLUDE 'derivative.inc'
 ;*******************************************************************
 ;* Writing to the LCD *
 ;*******************************************************************
